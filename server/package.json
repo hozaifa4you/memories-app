@@ -1,0 +1,23 @@
+{
+	"name": "index.js",
+	"version": "1.0.0",
+	"description": "This is just a simple social media application to share your memories.",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node index",
+		"dev": "nodemon index"
+	},
+	"repository": "https://github.com/yousuf4you/memories-app.git",
+	"author": "yousuf4you",
+	"license": "MIT",
+	"private": true,
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.2",
+		"mongoose": "^6.1.4",
+		"morgan": "^1.10.0",
+		"nodemon": "^2.0.15"
+	}
+}
