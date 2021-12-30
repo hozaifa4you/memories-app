@@ -62,6 +62,29 @@ class PostControllers {
 			return res.status(500).json({ message: error.message });
 		}
 	}
+
+	// like post
+	async likePost(req, res) {
+		const { id } = req.params;
+
+		try {
+			if (!mongoose.Types.ObjectId.isValid(id))
+				return res.status(404).json({ mongoose: "No Post with the id" });
+
+			const post = await PostMessage.findById(id);
+			const updatedPost = await PostMessage.findByIdAndUpdate(
+				id,
+				{
+					likeCount: post.likeCount + 1,
+				},
+				{ new: true }
+			);
+
+			return res.status(200).json(updatedPost);
+		} catch (error) {
+			return res.status(500).json({ message: error.message });
+		}
+	}
 }
 
 export default new PostControllers();
