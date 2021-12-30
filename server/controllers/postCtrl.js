@@ -43,7 +43,23 @@ class PostControllers {
 			);
 			res.status(200).json(updatedPost);
 		} catch (error) {
-			return res.status().json({ message: error.message });
+			return res.status(500).json({ message: error.message });
+		}
+	}
+
+	// delete posts
+	async deletePost(req, res) {
+		const { id } = req.params;
+
+		try {
+			if (!mongoose.Types.ObjectId.isValid(id))
+				return res.status(404).json({ mongoose: "No Post with the id" });
+
+			await PostMessage.findByIdAndRemove(id);
+
+			res.status(200).json({ message: "Post deleted successfully" });
+		} catch (error) {
+			return res.status(500).json({ message: error.message });
 		}
 	}
 }
