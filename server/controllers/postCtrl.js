@@ -34,10 +34,14 @@ class PostControllers {
 			if (!mongoose.Types.ObjectId.isValid(_id))
 				return res.status(404).json({ mongoose: "No Post with the id" });
 
-			const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, {
-				new: true,
-			});
-			res.status(202).json(updatedPost);
+			const updatedPost = await PostMessage.findByIdAndUpdate(
+				_id,
+				{ ...post, _id },
+				{
+					new: true,
+				}
+			);
+			res.status(200).json(updatedPost);
 		} catch (error) {
 			return res.status().json({ message: error.message });
 		}
