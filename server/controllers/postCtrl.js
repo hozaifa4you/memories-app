@@ -1,7 +1,9 @@
+import mongoose from "mongoose";
+
 import PostMessage from "../models/PostMessage.js";
 
 class PostControllers {
-	// you will get all posts
+	// you will get all posts by @get
 	async getPosts(req, res) {
 		try {
 			const postMessages = await PostMessage.find();
@@ -11,7 +13,7 @@ class PostControllers {
 		}
 	}
 
-	// create new post
+	// create new post by @post
 	async createPost(req, res) {
 		const post = req.body;
 		try {
@@ -20,6 +22,24 @@ class PostControllers {
 			res.status(201).json(newPost);
 		} catch (error) {
 			return res.status(409).json({ message: error.message });
+		}
+	}
+
+	// update post by @patch
+	async updatePost(req, res) {
+		const { id: _id } = req.params;
+		const post = req.body;
+
+		try {
+			if (!mongoose.Types.ObjectId.isValid(_id))
+				return res.status(404).json({ mongoose: "No Post with the id" });
+
+			const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, {
+				new: true,
+			});
+			res.status(202).json(updatedPost);
+		} catch (error) {
+			return res.status().json({ message: error.message });
 		}
 	}
 }

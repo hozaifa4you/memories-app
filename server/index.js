@@ -10,9 +10,8 @@ import postRoutes from "./routes/posts.js";
 dotenv.config();
 const PORT = process.env.PORT || 8080;
 const CONNECTION_URL = process.env.CONNECTION_URL;
-const CONNECTION_URL_2 = process.env.CONNECTION_URL_2;
 
-dbConnection(CONNECTION_URL_2);
+dbConnection(CONNECTION_URL);
 const app = express();
 
 // middleware
