@@ -1,5 +1,5 @@
 {
-	"name": "index.js",
+	"name": "memory-server",
 	"version": "1.0.0",
 	"description": "This is just a simple social media application to share your memories.",
 	"main": "index.js",

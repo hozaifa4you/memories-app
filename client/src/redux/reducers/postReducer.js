@@ -3,6 +3,7 @@ import {
 	CREATE_POST,
 	UPDATE_POST,
 	DELETE_POST,
+	LIKE_POST,
 } from "../types/postTypes";
 
 const reducer = (posts = [], action) => {
@@ -16,8 +17,9 @@ const reducer = (posts = [], action) => {
 			return [...posts, action.payload];
 		}
 
-		// update post
-		case UPDATE_POST: {
+		// update post and like post
+		case UPDATE_POST:
+		case LIKE_POST: {
 			return posts.map(post =>
 				post._id === action.payload._id ? action.payload : post
 			);
