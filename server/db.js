@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-export default function (CONNECTION_URL) {
+export default async function (CONNECTION_URL) {
 	process.setMaxListeners(Infinity);
-	mongoose
-		.connect(CONNECTION_URL, { useNewUrlParser: true })
+	await mongoose
+		.connect(CONNECTION_URL)
 		.then(() => {
 			console.log(`Database connected at: ${mongoose.connection.host}`);
 		})

@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import mongoose from "mongoose";
 
 import dbConnection from "./db.js";
 import postRoutes from "./routes/posts.js";
@@ -10,8 +11,10 @@ import postRoutes from "./routes/posts.js";
 dotenv.config();
 const PORT = process.env.PORT || 8080;
 const CONNECTION_URL = process.env.CONNECTION_URL;
+const CONNECTION_URL_2 = process.env.CONNECTION_URL_2;
 
 dbConnection(CONNECTION_URL);
+
 const app = express();
 
 // middleware

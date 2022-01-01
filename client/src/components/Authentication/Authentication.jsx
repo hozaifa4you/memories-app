@@ -16,21 +16,38 @@ import useStyles from "./styles";
 import Input from "./Input";
 import Icon from "./Icon";
 import { AUTH } from "../../redux/types/authTypes";
+import { signup, signin } from "../../redux/actions/authAction";
 
 // const isSignup = false;
+const initialState = {
+	firstName: "",
+	lastName: "",
+	email: "",
+	password: "",
+	confirmPassword: "",
+};
 
 const Authentication = () => {
 	const classes = useStyles();
-	const [showPassword, setShowPassword] = useState(false);
+	const [showPassword, setShowPassword] = useState(true);
 	const [isSignup, setIsSignup] = useState(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [formData, setFormData] = useState(initialState);
 	/// submit
 	const submitHandler = e => {
 		e.preventDefault();
+		// check sign up or not
+		if (isSignup) {
+			dispatch(signup(formData, navigate));
+		} else {
+			dispatch(signin(formData, navigate));
+		}
 	};
 	// change
-	const handleChange = () => {};
+	const handleChange = e => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
 	// show password
 	const handleShowPassword = () =>
 		setShowPassword(prevShowPassword => !prevShowPassword);
@@ -75,8 +92,8 @@ const Authentication = () => {
 								/>
 
 								<Input
-									name='firstName'
-									label='First Name'
+									name='lastName'
+									label='Last Name'
 									handleChange={handleChange}
 									half
 								/>
