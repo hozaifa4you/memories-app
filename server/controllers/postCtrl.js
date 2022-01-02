@@ -17,7 +17,7 @@ class PostControllers {
 	async createPost(req, res) {
 		const post = req.body;
 		try {
-			const newPost = new PostMessage(post);
+			const newPost = new PostMessage({ ...post, creator: req.userId });
 			await newPost.save();
 			res.status(201).json(newPost);
 		} catch (error) {

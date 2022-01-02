@@ -1,53 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 
-import useStyles from "./styles";
 import { createPost, updatePost } from "../../redux/actions/postActions";
+import useStyles from "./styles";
 
 const Form = ({ currentId, setCurrentId }) => {
-	const classes = useStyles();
 	const [postData, setPostData] = useState({
-		creator: "",
 		title: "",
 		message: "",
 		tags: "",
 		selectedFile: "",
 	});
-	const dispatch = useDispatch();
 	const post = useSelector(state =>
-		currentId ? state.Posts.find(p => p._id === currentId) : null
+		currentId ? state.Posts.find(message => message._id === currentId) : null
 	);
-
-	//handle submit
-	const handleSubmit = e => {
-		e.preventDefault();
-
-		if (currentId) {
-			dispatch(updatePost(currentId, postData));
-		} else {
-			dispatch(createPost(postData));
-		}
-
-		clear();
-	};
-	//clear form
-	const clear = () => {
-		setCurrentId(null);
-		setPostData({
-			creator: "",
-			title: "",
-			message: "",
-			tags: "",
-			selectedFile: "",
-		});
-	};
+	const dispatch = useDispatch();
+	const classes = useStyles();
+	const user = JSON.parse(localStorage.getItem("profile"));
 
 	useEffect(() => {
 		if (post) setPostData(post);
 	}, [post]);
+
+	const clear = () => {
+		setCurrentId(0);
+		setPostData({ title: "", message: "", tags: "", selectedFile: "" });
+	};
+
+	const handleSubmit = async e => {
+		e.preventDefault();
+
+		if (currentId === 0) {
+			dispatch(createPost({ ...postData, name: user?.result?.name }));
+			clear();
+		} else {
+			dispatch(
+				updatePost(currentId, { ...postData, name: user?.result?.name })
+			);
+			clear();
+		}
+	};
+
+	if (!user?.result?.name) {
+		return (
+			<Paper className={classes.paper}>
+				<Typography variant='h6' align='center'>
+					Please Sign In to create your own memories and like other's
+					memories.
+				</Typography>
+			</Paper>
+		);
+	}
 
 	return (
 		<Paper className={classes.paper}>
@@ -57,18 +62,8 @@ const Form = ({ currentId, setCurrentId }) => {
 				className={`${classes.root} ${classes.form}`}
 				onSubmit={handleSubmit}>
 				<Typography variant='h6'>
-					{`${currentId ? "Editing" : "Creating"}`} a Memory
+					{currentId ? `Editing "${post.title}"` : "Creating a Memory"}
 				</Typography>
-				<TextField
-					name='creator'
-					variant='outlined'
-					label='Creator'
-					fullWidth
-					value={postData.creator}
-					onChange={e =>
-						setPostData({ ...postData, creator: e.target.value })
-					}
-				/>
 				<TextField
 					name='title'
 					variant='outlined'
@@ -84,6 +79,8 @@ const Form = ({ currentId, setCurrentId }) => {
 					variant='outlined'
 					label='Message'
 					fullWidth
+					multiline
+					rows={4}
 					value={postData.message}
 					onChange={e =>
 						setPostData({ ...postData, message: e.target.value })
@@ -92,7 +89,7 @@ const Form = ({ currentId, setCurrentId }) => {
 				<TextField
 					name='tags'
 					variant='outlined'
-					label='Tags'
+					label='Tags (coma separated)'
 					fullWidth
 					value={postData.tags}
 					onChange={e =>
@@ -111,10 +108,10 @@ const Form = ({ currentId, setCurrentId }) => {
 				<Button
 					className={classes.buttonSubmit}
 					variant='contained'
+					color='primary'
 					size='large'
 					type='submit'
-					fullWidth
-					color='primary'>
+					fullWidth>
 					Submit
 				</Button>
 				<Button

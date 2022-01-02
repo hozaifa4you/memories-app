@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Grow, Container, Grid } from "@material-ui/core";
+import { Container, Grow, Grid } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 
-import { Posts, Form } from "../../components";
-import useStyles from "./styles";
 import { getPosts } from "../../redux/actions/postActions";
+import Posts from "../Posts/Posts";
+import Form from "../Form/Form";
 
 const Home = () => {
-	const classes = useStyles();
+	const [currentId, setCurrentId] = useState(0);
 	const dispatch = useDispatch();
-	const [currentId, setCurrentId] = useState(null);
 
 	useEffect(() => {
 		dispatch(getPosts());
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, getPosts]);
+	}, [currentId, dispatch]);
+
 	return (
 		<Grow in>
 			<Container>
 				<Grid
 					container
-					className={classes.mainContainer}
 					justifyContent='space-between'
 					alignItems='stretch'
 					spacing={3}>
